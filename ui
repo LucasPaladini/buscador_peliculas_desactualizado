@@ -1,0 +1,5 @@
+from ui import vago
+
+class Vago:
+  def __init__(self):
+      vago = lucas

@@ -1,22 +1,28 @@
-from PySide6.QtGui import QStandardItem, QStandardItemModel
-# from PySide6.QtWidgets import QMessageBox
-# from pelicula import Pelicula
+from vista import VentanaPrincipal, VentanaActor
+from pelicula import Pelicula
 
+class Controlador:
+    def __init__(self):
+        self.vista = VentanaPrincipal()
 
+    def buscar_peliculas_por_actores(self):
+        actor_1, actor_2 = self.vista.obtener_nombres_actores()
 
+        if actor_1 != actor_2:
+            try:
+                pelicula = Pelicula("", "", [], 0, "")
+                peliculas = pelicula.cargar_peliculas('peliculas/peliculas.txt')
 
-class ConectarBotones:
-    def __init__(self, ventanaprincipal):
-        self.__ventana_principal = ventanaprincipal
+                peliculas_encontradas = [p for p in peliculas if
+                                         actor_1.lower() in [a.lower() for a in p.actores] and actor_2.lower() in [
+                                             a.lower() for a in p.actores]]
 
-        # self.__modelo_tareas_vacias = QStandardItemModel()
-        # self.__modelo_tareas_completadas = QStandardItemModel()
-        # self.__ventana.tableTareaVacia.setModel(self.__modelo_tareas_vacias)  # (izq)
-        # self.__ventana.tableTareaCompletada.setModel(self.__modelo_tareas_completadas)  # (derec)
-
-    def abrir_actores(self):
-        from ventana import VentanaActor
-        print("Abriendo ventana Actor")
-        ventana_actor = VentanaActor()
-        ventana_actor.exec()
-
+                if peliculas_encontradas:
+                    ventana_actor = VentanaActor(actor_1, actor_2, peliculas_encontradas)
+                    ventana_actor.exec()
+                else:
+                    self.vista.mostrar_error("No se encontraron películas con esos actores.")
+            except (FileNotFoundError, ValueError) as e:
+                self.vista.mostrar_error(str(e))
+        else:
+            self.vista.mostrar_error("El actor no puede ser el mismo.")

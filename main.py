@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QApplication
+from vista import VentanaPrincipal
 import sys
-from ventana import VentanaPrincipal
 
 
 if __name__ == "__main__":
@@ -10,4 +10,5 @@ if __name__ == "__main__":
     ventana_principal.show()
 
     sys.exit(app.exec())
+
 
